@@ -1,0 +1,239 @@
+DROP TABLE IF EXISTS TbContratadoPJ;
+DROP TABLE IF EXISTS TbPessoa;
+DROP TABLE IF EXISTS TbSupervisor;
+DROP TABLE IF EXISTS TbBanco;
+DROP TABLE IF EXISTS TbContaCorrente;
+DROP TABLE IF EXISTS TbSecao;
+DROP TABLE IF EXISTS TbContratadoSecao;
+DROP TABLE IF EXISTS TbAutorizaMovimCCor;
+DROP TABLE IF EXISTS TbMovimCCorr;
+DROP TABLE IF EXISTS TbCidades;
+DROP TABLE IF EXISTS CEPS;
+DROP TABLE IF EXISTS TbCNPJ_RFB;
+DROP TABLE IF EXISTS TbCPF;
+DROP TABLE IF EXISTS Tb_Externa_FEBRABAN;
+
+
+CREATE TABLE TbContratadoPJ (
+Contratado_id ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+Pessoa_id INTEGER AUTOINCREMENT UNIQUE,
+FOREIGN KEY(Pessoa_id) REFERENCES TbPessoa(Pessoa_id));
+/**
+@table: TbContratadoPJ
+@description: Cadastros de contratados PJ
+@location: -415.54633 -3611.4111
+@colors: title(#423C78D8) Contratado_id(#3DCC0000) Pessoa_id(#3DF1C232)
+*/
+
+CREATE TABLE TbPessoa (
+Pessoa_id ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+nome VARCHAR(100) NOT NULL,
+TipoPessoa ENUM (F;J) AUTOINCREMENT DEFAULT J,
+CNPJ_CPF VARCHAR(20) AUTOINCREMENT UNIQUE,
+NomePessoa VARCHAR(100) NOT NULL,
+TipoDeSociedade VARCHAR(10) NOT NULL,
+CEP VARCHAR(10) NOT NULL,
+EndLogradouro VARCHAR(150) NOT NULL,
+EndNumero VARCHAR(10) NOT NULL,
+EndComplemento TINYTEXT(10) NOT NULL,
+Endcidade VARCHAR(50) NOT NULL,
+UF TINYTEXT(2) NOT NULL,
+Pais TINYTEXT(50) NOT NULL DEFAULT 'Brasil',
+telefones MEDIUMTEXT(120) NOT NULL,
+RG TEXT(100) NOT NULL,
+FOREIGN KEY(CNPJ_CPF) REFERENCES TbCNPJ_RFB(CNPJ),
+FOREIGN KEY(NomePessoa) REFERENCES TbCNPJ_RFB(CNPJ));
+/**
+@table: TbPessoa
+@description: tabela de dados de pessoal que fazem parte do quadro MAGNO
+@location: 355.7621 -3982.7632
+@columnsDescription:  Pessoa_id() nome() TipoPessoa(Pssoa Física ou Jurídica.) CNPJ_CPF(CPF ou CNPJ de acordo c/RFB) NomePessoa() TipoDeSociedade() CEP() EndLogradouro(Nome do logradouro ) EndNumero(número do logradouro ) EndComplemento() Endcidade() UF() Pais() telefones(campos para N telefones) RG()
+@colors: title(#3E3C78D8) Pessoa_id(#3ECC0000) nome(#FFFAFAFA) TipoPessoa(#FFFAFAFA) CNPJ_CPF(#FFFAFAFA) NomePessoa(#FFFAFAFA) TipoDeSociedade(#FFFAFAFA) CEP(#FFFAFAFA) EndLogradouro(#FFFAFAFA) EndNumero(#FFFAFAFA) EndComplemento(#FFFAFAFA) Endcidade(#FFFAFAFA) UF(#FFFAFAFA) Pais(#FFFAFAFA) telefones(#FFFAFAFA) RG(#FFFAFAFA)
+*/
+
+CREATE TABLE TbSupervisor (
+Supervisor_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+Pessoa_id INTEGER AUTOINCREMENT UNIQUE,
+FOREIGN KEY(Pessoa_id) REFERENCES TbPessoa(Pessoa_id));
+/**
+@table: TbSupervisor
+@description: Tabela de gestores ou supervisores de seções (departamentos hierárquicos)
+@location: -386.07602 -4111.628
+@columnsDescription:  Supervisor_id() Pessoa_id()
+@colors: title(#3E3C78D8) Supervisor_id(#3DCC0000) Pessoa_id(#3FF1C232)
+*/
+
+CREATE TABLE TbBanco (
+Banco_id ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+CodFebraban_id INTEGER(4) AUTOINCREMENT UNIQUE,
+agencia_id INTEGER AUTOINCREMENT UNIQUE,
+NomeBanco VARCHAR(50) AUTOINCREMENT UNIQUE,
+CEP INT(8) NOT NULL,
+endereco VARCHAR(100) NOT NULL,
+número endereco BIGINT NOT NULL,
+Nome Agencia VARCHAR(50) NOT NULL UNIQUE,
+Telefone1 NVARCHAR(20) NOT NULL,
+Telefone2 VARCHAR(20) NOT NULL,
+FOREIGN KEY(CodFebraban_id) REFERENCES Tb_Externa_FEBRABAN(bamco_id),
+FOREIGN KEY(NomeBanco) REFERENCES Tb_Externa_FEBRABAN(Nome));
+/**
+@table: TbBanco
+@description: Bancos na Magno
+@location: -52.57464 -4988.6924
+@columnsDescription:  Banco_id() CodFebraban_id(Índice unico) agencia_id(Índice único) NomeBanco() CEP() endereco(logradouro ) número endereco() Nome Agencia() Telefone1() Telefone2()
+@colors: title(#3E3C78D8) Banco_id(#40CC0000) CodFebraban_id(#FFFAFAFA) agencia_id(#FFFAFAFA) NomeBanco(#FFFAFAFA) CEP(#FFFAFAFA) endereco(#FFFAFAFA) número endereco(#FFFAFAFA) Nome Agencia(#FFFAFAFA) Telefone1(#FFFAFAFA) Telefone2(#FFFAFAFA)
+*/
+
+CREATE TABLE TbContaCorrente (
+ContaCorrente_id ROWID AUTOINCREMENT NOT NULL UNIQUE,
+ContratadoSecao_id INTEGER NOT NULL,
+Banco_id INTEGER NOT NULL,
+Agencia_id INTEGER NOT NULL,
+NumCcorrDigto VARCHAR(15) AUTOINCREMENT UNIQUE,
+PRIMARY KEY (ContaCorrente_id,ContratadoSecao_id),
+FOREIGN KEY(ContratadoSecao_id) REFERENCES TbContratadoSecao(ContratadosSecao_id),
+FOREIGN KEY(Banco_id) REFERENCES TbBanco(Banco_id),
+FOREIGN KEY(Agencia_id) REFERENCES TbBanco(agencia_id));
+/**
+@table: TbContaCorrente
+@description: Conta Corrente PJ
+@location: -988.9398 -5019.143
+@colors: title(#3F3C78D8) ContaCorrente_id(#FFFAFAFA) ContratadoSecao_id(#FFFAFAFA) Banco_id(#FFFAFAFA) Agencia_id(#FFFAFAFA) NumCcorrDigto(#FFFAFAFA)
+*/
+
+CREATE TABLE TbSecao (
+Secao_ID ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+CNPJ VARCHAR(20) AUTOINCREMENT UNIQUE,
+NomeRazaoSocial VARCHAR(100) AUTOINCREMENT UNIQUE,
+cep_id VARCHAR(10) NOT NULL,
+EndNumero TEXT NOT NULL,
+EndComplemento TINYTEXT(20) NOT NULL,
+EndUF ENUM (0) NOT NULL,
+Cidade_id INTEGER NOT NULL,
+NomeCidade VARCHAR(100) AUTOINCREMENT UNIQUE,
+Pais TINYTEXT(50) NOT NULL DEFAULT 'Brasil',
+Fones MULTILINESTRING(120) NOT NULL,
+Supervisor _id INTEGER NOT NULL DEFAULT N --> 1,
+FOREIGN KEY(cep_id) REFERENCES CEPS(cep_id),
+FOREIGN KEY(EndNumero) REFERENCES CEPS(logradouro ),
+FOREIGN KEY(EndUF) REFERENCES CEPS(UF),
+FOREIGN KEY(Cidade_id) REFERENCES TbCidades(Cidade_id),
+FOREIGN KEY(NomeCidade) REFERENCES TbCidades(Nome),
+FOREIGN KEY(Supervisor _id) REFERENCES TbSupervisor(Supervisor_id));
+/**
+@table: TbSecao
+@description: Seções e Departamentos
+@location: 204.9096 -4500.9014
+@columnsDescription:  Secao_ID() CNPJ(CNPJ raiz deverá ser o mesmo que a da Matriz) NomeRazaoSocial() cep_id(se zero, preencher endereço estrangeiro, senão, usar default) EndNumero() EndComplemento(Complemento, se houver.) EndUF(Validar UFs existentes) Cidade_id() NomeCidade() Pais() Fones(campo para N telefones.) Supervisor _id()
+@colors: title(#423C78D8) Secao_ID(#3CCC0000) CNPJ(#FFFAFAFA) NomeRazaoSocial(#FFFAFAFA) cep_id(#FFFAFAFA) EndNumero(#FFFAFAFA) EndComplemento(#FFFAFAFA) EndUF(#FFFAFAFA) Cidade_id(#FFFAFAFA) NomeCidade(#FFFAFAFA) Pais(#FFFAFAFA) Fones(#FFFAFAFA) Supervisor _id(#FFFAFAFA)
+*/
+
+CREATE TABLE TbContratadoSecao (
+ContratadosSecao_id ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+Secao_id INTEGER AUTOINCREMENT UNIQUE,
+ContratadoPJ_id INTEGER AUTOINCREMENT UNIQUE,
+FOREIGN KEY(Secao_id) REFERENCES TbSecao(Secao_ID),
+FOREIGN KEY(ContratadoPJ_id) REFERENCES TbContratadoPJ(Contratado_id));
+/**
+@table: TbContratadoSecao
+@description: Contratados distribuídos por seção
+@location: -1064.3765 -4273.7295
+@columnsDescription:  ContratadosSecao_id() Secao_id() ContratadoPJ_id()
+@colors: title(#3A3C78D8) ContratadosSecao_id(#3DCC0000) Secao_id(#45F1C232) ContratadoPJ_id(#3DF1C232)
+*/
+
+CREATE TABLE TbAutorizaMovimCCor (
+AutorizaMovim_id ROWID PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+ContaCorrente_id INTEGER AUTOINCREMENT UNIQUE,
+Bloqueado BOOLEAN NOT NULL DEFAULT True,
+FOREIGN KEY(ContaCorrente_id) REFERENCES TbContaCorrente(ContaCorrente_id));
+/**
+@table: TbAutorizaMovimCCor
+@description: Autorizações de movimentação bancaria
+@location: -999.62494 -4741.8716
+@colors: title(#3A3C78D8) AutorizaMovim_id(#3DCC0000) ContaCorrente_id(#FFFAFAFA) Bloqueado(#FFFAFAFA)
+*/
+
+CREATE TABLE TbMovimCCorr (
+MovimCCorr_id ROWID AUTOINCREMENT NOT NULL UNIQUE,
+AutorizaMovim_id INTEGER NOT NULL,
+TipoMovim ENUM ("C","D"),
+VrLcto DECIMAL(14) NOT NULL,
+DataLcto TIMESTAMP NOT NULL DEFAULT System,
+PRIMARY KEY (MovimCCorr_id,AutorizaMovim_id),
+FOREIGN KEY(AutorizaMovim_id) REFERENCES TbAutorizaMovimCCor(AutorizaMovim_id));
+/**
+@table: TbMovimCCorr
+@description: Movimentação de Conta Corrente de Contratados PJ
+@location: -998.4904 -4533.3413
+@colors: title(#3D3C78D8) MovimCCorr_id(#3FCC0000) AutorizaMovim_id(#FFFAFAFA) TipoMovim(#FFFAFAFA) VrLcto(#FFFAFAFA) DataLcto(#FFFAFAFA)
+*/
+
+CREATE TABLE TbCidades (
+Cidade_id XML NOT NULL,
+UF XML (0) NOT NULL,
+Nome XML NOT NULL);
+/**
+@table: TbCidades
+@description: Tabela MongoDB resultado 
+dos código de cidades segundo o IBGE consulta por REST
+@location: 1884.8727 -4434.0576
+@columnsDescription:  Cidade_id() UF() Nome()
+@colors: title(#67979B9F) Cidade_id(#FFFAFAFA) UF(#FFFAFAFA) Nome(#FFFAFAFA)
+*/
+
+CREATE TABLE CEPS (
+cep_id JSON NOT NULL,
+logradouro  JSON NOT NULL,
+bairro JSON NOT NULL,
+UF JSON (AC,AM,AP,BA,CE, DF, ES,MA,MG,MS, MT, GO,PI,RN,RJ,RS,RR,RO,SP,SC,TO,PA,AL,PE,PR) AUTOINCREMENT NOT NULL UNIQUE,
+FOREIGN KEY(UF) REFERENCES TbCidades(UF));
+/**
+@table: CEPS
+@description: Tabela resultado da ECT via REST
+@location: 1464.0768 -4523.768
+@columnsDescription:  cep_id() logradouro () bairro() UF()
+@colors: title(#FFD1D1D1) cep_id(#FFFAFAFA) logradouro (#FFFAFAFA) bairro(#FFFAFAFA) UF(#FFFAFAFA)
+*/
+
+CREATE TABLE TbCNPJ_RFB (
+CNPJ XML NOT NULL,
+RAZAOSOCIAL XML AUTOINCREMENT UNIQUE,
+TipoSociedade ROWID NOT NULL,
+FOREIGN KEY(RAZAOSOCIAL) REFERENCES TbPessoa(NomePessoa),
+FOREIGN KEY(TipoSociedade) REFERENCES TbPessoa(TipoDeSociedade));
+/**
+@table: TbCNPJ_RFB
+@description: Tabela externa mongoDB resultado do REST de acesso a RFB.
+@location: 1400.7075 -3704.163
+@columnsDescription:  CNPJ() RAZAOSOCIAL() TipoSociedade()
+@colors: title(#FFD1D1D1) CNPJ(#FFFAFAFA) RAZAOSOCIAL(#FFFAFAFA) TipoSociedade(#FFFAFAFA)
+*/
+
+CREATE TABLE TbCPF (
+CPF XML NOT NULL,
+NOME XML NOT NULL,
+VALIDO JSON(1) NOT NULL,
+DATAVALIDADE JSON NOT NULL,
+FOREIGN KEY(CPF) REFERENCES TbPessoa(CNPJ_CPF),
+FOREIGN KEY(NOME) REFERENCES TbPessoa(NomePessoa));
+/**
+@table: TbCPF
+@description: tabela MongoDB resultado do Serviço Rest RFB CPF
+@location: 1407.2881 -3981.8823
+@columnsDescription:  CPF() NOME() VALIDO() DATAVALIDADE()
+@colors: title(#FFD1D1D1) CPF(#FFFAFAFA) NOME(#FFFAFAFA) VALIDO(#FFFAFAFA) DATAVALIDADE(#FFFAFAFA)
+*/
+
+CREATE TABLE Tb_Externa_FEBRABAN (
+bamco_id JSON AUTOINCREMENT UNIQUE,
+Nome JSON AUTOINCREMENT UNIQUE);
+/**
+@table: Tb_Externa_FEBRABAN
+@description: acesso ao serviço 
+REST da FEBRABAN ao tabela de códigos dos bancos.
+@location: 731.9989 -5006.03
+@columnsDescription:  bamco_id() Nome()
+@colors: title(#FFD1D1D1) bamco_id(#FFFAFAFA) Nome(#FFFAFAFA)
+*/
+
