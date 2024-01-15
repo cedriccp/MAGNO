@@ -1,0 +1,47 @@
+15/01/2024
+MODELO TRES CAMADAS BANCO MAGNO
+
+1.	TÍTULO 1
+Processo para implantar o modelo em camadas de softwares.
+
+A.	Introdducao
+Para otimizar a questão de infra e de sistemas da tecnologia da informação, criar o modelo de tres camadas sendo: Camada de Aplicacao Front End, Camada de Regras de Negócios e Camada de acesso a Dados.
+
+
+2.	FERRAMENTAS DE SOFTWARES 
+As ferramentas de softwares a serem adquiridas e implantadas são, JavaScript ou similar para Developer Front End. Mule Soft para automatização e integrações entre aplicações, Java para backend, banco Relacionais: Oracle para massa grande de dados, Firebird para apps legados, Não relacionais MomgoDB para tabelas onde colunas são mais importantes do que linhas de tabelas.
+
+
+3.	FLUXO DESCRITIVO
+A.	Usuários: acessar servidor Web local ou remoto. Acesso remoto por VPN. Implantar firewall para LAN e WAN.
+
+B.	Camada de Aplicação, em Nuvem: Implantar Firewall exclusivo para acesso em cloud. Usuários: acessar APP frontEnd em JS.
+
+C.	Camada de Aplicação FrontEnd: Consumir integração e automatização MuleSoft;
+
+D.	Camada de Regras de Negócio: IA Mule escolher qual APP e qual ApIs consumir;
+
+E.	CAMADAS DE REGRAS DE NEGÓCIOS: APIs acessam CAMADA DE ACESSO A DADOS de acordo com o dado table necessário.
+
+F.	Camadas de acesso a Dados consistir em Stored Procedures, Triggers, Pakages em banco Oracle ou Firebird (relacionais) ou se dados miscelâneas ou especificar colunas e informações aleatórias e usar dados do MogoDB.
+
+G.	Banco de dados retornar valores para API que o consumiu, criar exceptions.
+H.	API retornar valores para o FrontEnd que consumiu.
+
+I.	Front End poderá consumir API externas. Configurar firewall.
+
+
+4.	PREMISSAS.
+A.	Implantar e configurar Firewall fpsense para rede local e para cloud. Qualquer solicitação de transações a requisição deverá ser analisada pelas regras nos respectivos firewall de acordo com a natureza da transação: web/vpn e/ou Lan/wan.
+
+B.	Definir framework SprongBoot ou VSCODE.
+
+C.	Definir Onde.KS ou react ou angular para FrontEnd;
+
+D.	Definir tecnologia UX para Front End.
+
+E.	Definir tecnologia AWS/AZURE e LINUX DEVOPS para backend.
+
+F.	Manutenções e empíricos monolíticos: Respeitando as técnicas SOLID – ODD, TDD e DDD. Se legado, respirar as regras de Design Partners.
+
+G.	Criar Painel de medição e estabilidade de APIs com histórico de esteira ate estabilização em tempo real com Grafana. Utilizar framework Terraform Linux.
